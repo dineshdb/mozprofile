@@ -5,7 +5,8 @@ import { updateRepo } from "./git.ts";
 import { applySSH } from "./ssh.ts";
 
 export async function applyProfile(basePath: string) {
-  await Promise.all([applyMozProfile(basePath), applySSH(basePath)]);
+  const configPath = path.join(basePath, "config");
+  await Promise.all([applyMozProfile(configPath), applySSH(configPath)]);
 }
 
 export async function prepareGitProfile(url: string) {

@@ -30,12 +30,12 @@ function getFirefoxProfiles() {
   return profiles;
 }
 
-export async function applyMozProfile(basePath: string) {
+export async function applyMozProfile(configPath: string) {
   const profiles = getFirefoxProfiles();
   for (const profile of profiles) {
     if (profile.Path) {
       const profileDir = path.join(MOZILLA_DIR, "firefox", profile.Path);
-      await copyDir(path.join(basePath, "mozprofile"), profileDir);
+      await copyDir(path.join(configPath, "mozprofile"), profileDir);
     }
   }
 }
