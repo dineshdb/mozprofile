@@ -13,3 +13,11 @@ export async function updateRepo(dir: string) {
     Deno.chdir(cwd);
   }
 }
+
+export async function gitClone(url: string, dir: string) {
+  const { code, stderr } = await git(`clone ${url} ${dir}`);
+  if (code !== 0) {
+    console.error("git:", new TextDecoder().decode(stderr));
+    throw new Error("failed to clone repo");
+  }
+}

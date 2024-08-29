@@ -1,7 +1,7 @@
-import { fs, git, parseYaml, path } from "../deps.ts";
+import { fs, parseYaml, path } from "../deps.ts";
 import { HOME } from "./config.ts";
 import { applyMozProfile } from "./firefox.ts";
-import { updateRepo } from "./git.ts";
+import { gitClone, updateRepo } from "./git.ts";
 import { applyHome } from "./home.ts";
 import { applySSH } from "./ssh.ts";
 
@@ -27,13 +27,7 @@ export async function prepareGitProfile(url: string) {
   if (exists) {
     await updateRepo(localGitClonePath);
   } else {
-    const { code, stderr } = await git(
-      `clone ${url} ${localGitClonePath}`,
-    );
-    if (code !== 0) {
-      console.error("git:", new TextDecoder().decode(stderr));
-      Deno.exit(code);
-    }
+    await gitClone(url, localGitClonePath);
   }
 
   return localGitClonePath;
@@ -48,8 +42,7 @@ type Config = {
 
 export async function getConfig(): Promise<Config> {
   if (!fs.existsSync("config.yaml")) {
-    console.error("config.yaml not found");
-    Deno.exit(1);
+    throw new Error("config.yaml not found");
   }
 
   return parseYaml(await Deno.readTextFile("config.yaml")) as Config;
