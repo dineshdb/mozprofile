@@ -21,10 +21,10 @@ export async function applySSHCsv(configPath: string) {
     return;
   }
 
-  const servers: ServerConfig[] = await parseCsv(sshCsv, {
+  const servers = (await parseCsv(sshCsv, {
     skipFirstRow: true,
     separator: ",",
-  });
+  })) as unknown as ServerConfig[];
 
   const sshDir = path.join(HOME, ".ssh");
   await fs.ensureDir(sshDir);
