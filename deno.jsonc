@@ -4,7 +4,7 @@
     "fmt": "deno fmt ."
   },
   "name": "@util/profbuilder",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "exports": "./mod.ts",
   "license": "MIT",
   "imports": {

@@ -2,10 +2,13 @@ import { fs, git, parseYaml, path } from "../deps.ts";
 import { HOME } from "./config.ts";
 import { applyMozProfile } from "./firefox.ts";
 import { updateRepo } from "./git.ts";
+import { applyHome } from "./home.ts";
 import { applySSH } from "./ssh.ts";
 
 export async function applyProfile(basePath: string) {
   const configPath = path.join(basePath, "config");
+  // we don't do any preprocessing with ~ so let's just apply it first
+  await applyHome(configPath);
   await Promise.all([applyMozProfile(configPath), applySSH(configPath)]);
 }
 
