@@ -1,23 +1,15 @@
-import { git } from "../deps.ts";
+import { path } from "../deps.ts";
+import { HOME } from "./config.ts";
 
-export async function updateRepo(dir: string) {
-  const cwd = Deno.cwd();
-  try {
-    Deno.chdir(dir);
-    const { code, stderr } = await git("pull");
-    if (code !== 0) {
-      console.error("git:", new TextDecoder().decode(stderr));
-      throw new Error("failed to update repo");
-    }
-  } finally {
-    Deno.chdir(cwd);
-  }
-}
+export async function generateIncludeFile() {
+	const configDir = path.join(HOME, ".config", "gitconfig.d");
+	const entries = Deno.readDirSync(configDir);
+	var files = Array.from(entries)
+		.filter((entry) => entry.isFile)
+		.map((entry) => entry.name)
+		.filter((name) => !name.startsWith("."))
+		.filter((name) => !name.startsWith("_"));
 
-export async function gitClone(url: string, dir: string) {
-  const { code, stderr } = await git(`clone ${url} ${dir}`);
-  if (code !== 0) {
-    console.error("git:", new TextDecoder().decode(stderr));
-    throw new Error("failed to clone repo");
-  }
+	const text = `[include]\n${files.map((file) => `\tpath = ${file}`).join("\n")}\n`;
+	await Deno.writeTextFile(path.join(configDir, "_include.conf"), text);
 }

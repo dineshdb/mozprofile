@@ -2,6 +2,7 @@
 
 import { fs, path } from "./deps.ts";
 import { HOME } from "./src/config.ts";
+import { generateIncludeFile } from "./src/git.ts";
 import { applyProfile, getConfig, prepareGitProfile } from "./src/profile.ts";
 
 export default async function main() {
@@ -24,6 +25,7 @@ export default async function main() {
       await applyProfile(localGitClonePath);
     }
   }
+  await generateIncludeFile();
 }
 
 if (import.meta.main) {

@@ -1,9 +1,9 @@
 import { fs, parseYaml, path } from "../deps.ts";
 import { HOME } from "./config.ts";
 import { applyMozProfile } from "./firefox.ts";
-import { gitClone, updateRepo } from "./git.ts";
 import { applyHome } from "./home.ts";
 import { applySSH } from "./ssh.ts";
+import { gitClone, updateRepo } from "./utils/git.ts";
 
 export async function applyProfile(basePath: string) {
   const configPath = path.join(basePath, "config");
