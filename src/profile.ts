@@ -33,17 +33,27 @@ export async function prepareGitProfile(url: string) {
   return localGitClonePath;
 }
 
-type Config = {
+export type Config = {
   profile: {
     path?: string;
     url?: string;
   }[];
+  finally?: FinalCleanup;
 };
 
-export async function getConfig(): Promise<Config> {
-  if (!fs.existsSync("config.yaml")) {
+type FinalCleanup = {
+  title?: string;
+  error?: string;
+  if: string;
+  then?: string;
+  else?: string;
+};
+
+export async function getConfig(profileDir: string): Promise<Config> {
+  const configPath = path.join(profileDir, "config.yaml");
+  if (!fs.existsSync(configPath)) {
     throw new Error("config.yaml not found");
   }
 
-  return parseYaml(await Deno.readTextFile("config.yaml")) as Config;
+  return parseYaml(await Deno.readTextFile(configPath)) as Config;
 }
