@@ -36,7 +36,7 @@ export default async function main() {
   }
 
   const allProfiles = [...importedProfiles, config];
-  const finalSections = allProfiles.filter((p) => p.finally).map((p) =>
+  const finalSections = allProfiles.filter((p) => p?.finally).map((p) =>
     p.finally!
   ).flat();
   for (const finalSection of finalSections) {

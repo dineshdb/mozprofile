@@ -52,7 +52,9 @@ type FinalCleanup = {
 export async function getConfig(profileDir: string): Promise<Config> {
   const configPath = path.join(profileDir, "config.yaml");
   if (!fs.existsSync(configPath)) {
-    throw new Error("config.yaml not found");
+    return {
+      profile: [],
+    }
   }
 
   return parseYaml(await Deno.readTextFile(configPath)) as Config;
